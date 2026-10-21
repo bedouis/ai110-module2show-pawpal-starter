@@ -29,10 +29,10 @@ classDiagram
 
     class Scheduler {
         +Owner owner
-        +generate_plan() list~PetTask~
+        +generate_plan(day) list~PetTask~
         +sort_by_time() list~PetTask~
         +sort_by_priority() list~PetTask~
-        +filter_tasks(pet, completed) list~PetTask~
+        +filter_tasks(pet, completed, day) list~PetTask~
         +complete_task(pet, task) Optional~Task~
         +detect_conflicts() list~Conflict~
     }

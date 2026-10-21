@@ -44,15 +44,41 @@ pip install -r requirements.txt
 
 ## 🖥️ Sample Output
 
-Paste a sample of your app's CLI or Streamlit output here so a reader can see what a generated plan looks like:
+`main.py` is a command-line demo of how the four core classes work together. It creates one `Owner` with two `Pet`s, assigns each pet several `Task`s, and then asks a `Scheduler` for today's plan.
 
+Run it from the project root:
+
+```bash
+python main.py
 ```
-# e.g.:
-# Daily plan for Biscuit (Golden Retriever):
-#   08:00 — Morning walk (30 min) [priority: high]
-#   09:00 — Feeding (10 min) [priority: high]
-#   ...
+
+Output:
+
+```text
+Today's Schedule
+Time   Pet       Task              Status
+------------------------------------------
+07:30  Rex       Morning walk      Pending
+08:00  Mia       Feed breakfast    Pending
+09:30  Mia       Vet check-up      Pending
+18:00  Rex       Evening walk      Pending
 ```
+
+**What this shows**
+
+- **Multi-pet scheduling:** The `Scheduler` is given only the `Owner`. It gathers tasks from every pet through `Owner.get_all_tasks()`, so Rex's and Mia's tasks appear together in one plan, and each row names the pet it belongs to.
+- **Chronological ordering:** The tasks were added in a different order (18:00, 09:30, 07:30, 08:00). `Scheduler.generate_plan()` returns them sorted by scheduled time, so the plan reads from morning to evening regardless of which pet each task belongs to.
+
+## 🧩 Implementation Summary
+
+The logic layer in `pawpal_system.py` has four classes:
+
+- **`Owner`** manages multiple pets. It adds and removes pets, and `get_all_tasks()` returns `(pet, task)` pairs for every task across all of its pets.
+- **`Pet`** stores a pet's name, species, age and its list of `Task`s. It adds and removes tasks, rejects duplicates, and reports pending tasks. Completed tasks stay in the list as history.
+- **`Task`** represents one care activity: description, duration, `Priority`, scheduled `datetime`, `Frequency` and completion status. `mark_complete()` sets the flag and, for `DAILY` or `WEEKLY` tasks, returns a new pending task one day or one week later.
+- **`Scheduler`** is created with an `Owner` and reads every pet's tasks through `Owner.get_all_tasks()`. It sorts by time or priority, filters by pet, completion and date, builds a daily plan, completes tasks (adding the next occurrence of recurring ones), and detects overlapping tasks.
+
+Together, the `Owner` holds the pets, each `Pet` holds its tasks, and the `Scheduler` combines them into a single chronological plan across all pets.
 
 ## 🧪 Testing PawPal+
 
