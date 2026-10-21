@@ -1,0 +1,44 @@
+classDiagram
+    class Owner {
+        +str name
+        +list~Pet~ pets
+        +add_pet(pet)
+        +remove_pet(pet)
+        +get_all_tasks() list~PetTask~
+    }
+
+    class Pet {
+        +str name
+        +str species
+        +int age
+        +list~Task~ tasks
+        +add_task(task)
+        +remove_task(task)
+        +get_pending_tasks() list~Task~
+    }
+
+    class Task {
+        +str description
+        +int duration_minutes
+        +Priority priority
+        +datetime scheduled_time
+        +Frequency frequency
+        +bool is_complete
+        +mark_complete() Optional~Task~
+    }
+
+    class Scheduler {
+        +Owner owner
+        +generate_plan() list~PetTask~
+        +sort_by_time() list~PetTask~
+        +sort_by_priority() list~PetTask~
+        +filter_tasks(pet, completed) list~PetTask~
+        +complete_task(pet, task) Optional~Task~
+        +detect_conflicts() list~Conflict~
+    }
+
+    Owner "1" *-- "*" Pet : manages
+    Pet "1" *-- "*" Task : has
+    Scheduler --> "1" Owner : organizes tasks for
+
+    note for Scheduler "PetTask = (Pet, Task) pair\nConflict = (PetTask, PetTask) pair"

@@ -4,8 +4,14 @@
 
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+
+**Core user actions**
+
+The design is built around three things a user should be able to do:
+
+1. **Add a pet.** The owner registers a pet by giving its name, species and age. The pet is added to the owner's list, so one owner can manage several pets.
+2. **Schedule a care task for a pet.** The owner picks a pet and adds a task such as a walk, feeding or vet visit. They set a description, a start date and time, how long it takes, a priority, and whether it happens once, daily or weekly. The task is stored under that pet.
+3. **See the day's plan and any conflicts.** The owner asks for an ordered view of pending tasks across all their pets, sorted by time or by priority. The app also warns when two tasks overlap in time, naming both pets and tasks. When the owner marks a task complete, it stays in the pet's history. If it repeats, the next occurrence is scheduled automatically.
 
 **b. Design changes**
 
